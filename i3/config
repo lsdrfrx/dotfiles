@@ -49,7 +49,7 @@ floating_modifier $mod
 
 # move tiling windows via drag & drop by left-clicking into the title bar,
 # or left-clicking anywhere into the window while holding the floating modifier.
-tiling_drag modifier titlebar
+# tiling_drag modifier titlebar
 
 # start a terminal
 # bindsym $mod+Return exec i3-sensible-terminal
@@ -197,7 +197,7 @@ border_radius 10
 
 default_border pixel 0
 
-exec --no-startup-id cd ~/xborder && ./xborders --border-rgba A6A6A6FF --border-width 3
+exec --no-startup-id cd ~/xborder && ./xborders --border-rgba a3be8cff --border-width 3
 
 bindsym $mod+Ctrl+Right resize shrink width 1 px or 1 ppt
 bindsym $mod+Ctrl+Up resize grow height 1 px or 1 ppt
@@ -209,7 +209,7 @@ bindsym $mod+Ctrl+Shift+Up resize grow height 10 px or 10 ppt
 bindsym $mod+Ctrl+Shift+Down resize shrink height 10 px or 10 ppt
 bindsym $mod+Ctrl+Shift+Left resize grow width 10 px or 10 ppt
 
-bindsym $mod+Shift+w exec --no-startup-id chromium
+bindsym $mod+Shift+w exec --no-startup-id vieb
 
 bindsym $mod+p exec --no-startup-id maim | xclip -selection clipboard -t image/png
 bindsym $mod+Shift+p exec --no-startup-id maim --select | xclip -selection clipboard -t image/png
