@@ -1,0 +1,420 @@
+#+TITLE: Emacs Configuration
+#+AUTHOR: Christian Guetnga
+#+EMAIL: lsdrfrx@gmail.com
+
+This is my brand new emacs configuration
+
+* General settings
+#+BEGIN_SRC emacs-lisp
+  (setq-default warning-minimum-level :error)
+  (setq-default indent-tabs-mode nil)
+  (setq-default tab-width 2)
+  (setq scroll-step 1)
+  (setq scroll-conservatively 10000)
+#+END_SRC
+
+** Appearance
+#+BEGIN_SRC emacs-lisp
+  (setq inhibit-startup-message t)
+  (menu-bar-mode -1)
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+
+  (display-line-numbers-mode 1)
+
+  (add-to-list 'default-frame-alist '(font . "Fira Code Nerd Font Mono-14"))
+#+END_SRC
+
+* Evil mode
+#+BEGIN_SRC emacs-lisp
+  (use-package undo-fu
+    :ensure t)
+  
+  (use-package evil
+    :ensure t
+    :init
+    (setq evil-want-integration t)
+    (setq evil-want-keybinding nil)
+    :config
+    (evil-mode 1))
+
+  (use-package evil-collection
+    :after evil
+    :ensure t
+    :config
+    (evil-collection-init))
+#+END_SRC
+
+* Org
+** General
+#+BEGIN_SRC emacs-lisp
+  (setq org-link-frame-setup
+    '((vm . vm-visit-folder-other-frame)
+    (vm-imap . vm-visit-imap-folder-other-frame)
+    (gnus . org-gnus-no-new-news)
+    (file . find-file)
+    (wl . wl-other-frame)))
+
+  (setq
+    org-hide-emphasis-markers t
+    org-return-follows-link t
+    org-startup-with-latex-preview t)
+
+  (setq org-todo-keywords '((sequence "TODO" "SOMEDAY" "IN PROGRESS" "MEETING" "|" "DONE" "DELEGATED" "CANCELED")))
+#+END_SRC
+
+** Appearance
+#+BEGIN_SRC emacs-lisp
+  (custom-theme-set-faces
+    'user
+    '(fixed-pitch ((t ( :family "Fira Code Nerd Font Mono" :height 130)))))
+
+   (custom-theme-set-faces
+     'user
+     '(org-block ((t (:inherit fixed-pitch))))
+     '(org-code ((t (:inherit (shadow fixed-pitch)))))
+     '(org-document-info ((t (:foreground "dark orange"))))
+     '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
+     '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
+     '(org-link ((t (:foreground "royal blue" :underline t))))
+     '(org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+     '(org-property-value ((t (:inherit fixed-pitch))) t)
+     '(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+     '(org-table ((t (:inherit fixed-pitch :foreground "#83a598"))))
+     '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
+     '(org-verbatim ((t (:inherit (shadow fixed-pitch))))))
+
+  (use-package org-modern
+    :ensure t
+    :config
+    (setq org-modern-star "replace")
+    (setq org-modern-replace-stars "󰪥")
+    (global-org-modern-mode))
+
+    (setq org-ellipsis "↴")
+#+END_SRC
+
+#+RESULTS:
+: ↴
+
+** Org Roam
+#+BEGIN_SRC emacs-lisp
+  (use-package org-roam
+    :ensure t
+    :custom
+    (org-roam-directory (file-truename "~/Documents/org"))
+    :bind (("C-c n i" . org-roam-node-insert)
+           ("C-c n f" . org-roam-node-find)
+           ("C-c n g" . org-roam-graph))
+    :config
+    (org-roam-db-autosync-mode))
+
+  (use-package org-roam-ui
+    :ensure t
+    :after org-roam
+    :config
+    (setq org-roam-ui-sync-theme t
+          org-roam-ui-follow t
+          org-roam-ui-update-on-save t
+          org-roam-ui-open-on-start t))
+#+END_SRC
+
+#+RESULTS:
+
+** LaTeX
+#+BEGIN_SRC emacs-lisp
+  (setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
+
+  (use-package org-fragtog
+    :ensure t
+    :config
+    (add-hook 'org-mode-hook 'org-fragtog-mode))
+#+END_SRC
+
+** Org Agenda
+#+BEGIN_SRC emacs-lisp
+  (use-package org-super-agenda
+    :ensure t
+    :config
+    (setq org-super-agenda-groups
+      '((:name "Today"
+         :time-grid t
+         :date today
+         :scheduled today
+         :order 1)
+        (:name "Meetings"
+         :todo "MEETING")
+        (:name "Important"
+         :priority "A")
+        (:name "Deadlines"
+         :deadline future)
+        (:name "In Progress"
+         :todo "IN PROGRESS")
+        (:name "Coding"
+         :tag "CODE")
+        (:name "Delegated"
+         :todo "DELEGATED"))))
+
+  (setq
+    org-agenda-files (list "~/Documents/org/agenda.org")
+    org-agenda-span 1
+    org-agenda-skip-timestamp-if-done t
+    org-agenda-skip-deadline-if-done t
+    org-agenda-skip-scheduled-if-done t
+    org-agenda-day "-1d"
+    org-agenda-prefix-format '(
+      (agenda . " %?-2i %t ")
+      (todo . " %i %-12:c ")
+      (tags . " %i %-12:c ")
+      (search . " %i %-12:c ")))
+#+END_SRC
+
+** Org Babel
+#+BEGIN_SRC emacs-lisp
+  (org-babel-do-load-languages
+    'org-babel-load-languages
+    '((python . t)))
+#+END_SRC
+
+* Development
+** LSP setup
+#+BEGIN_SRC emacs-lisp
+  (use-package lsp-mode
+    :ensure t
+    :init
+    (setq lsp-keymap-prefix "C-c l")
+    :hook (
+      (python-mode . lsp)
+      (nim-mode . lsp)
+      (c-mode . lsp)
+    )
+    :commands lsp
+    :config
+    (setq lsp-headerline-breadcrumb-enable nil))
+
+  (use-package lsp-ui
+    :ensure t
+    :commands lsp-ui-mode)
+
+  (use-package lsp-ivy
+    :ensure t
+    :commands lsp-ivy-workspace-symbol)
+
+  (use-package lsp-treemacs
+    :ensure t
+    :commands lsp-treemacs-errors-list)
+#+END_SRC
+
+#+RESULTS:
+
+** Company
+#+BEGIN_SRC emacs-lisp
+  (use-package company
+    :ensure t
+    :init
+    (add-hook 'after-init-hook 'global-company-mode)
+    :config
+    (setq company-idle-delay
+      (lambda () (if (company-in-string-or-comment) nil 0.2)))
+    (setq company-selection-wrap-around t)
+    (setq company-tooltip-align-annotations t)
+    (setq company-tooltip-flip-when-above t))
+#+END_SRC
+
+#+RESULTS:
+: t
+
+
+** Languages
+#+BEGIN_SRC emacs-lisp
+  (use-package lsp-pyright
+    :ensure t
+    :hook (python-mode . (lambda ()
+                            (require 'lsp-pyright)
+                            (lsp))))
+
+  (use-package nim-mode :ensure t)
+#+END_SRC
+
+** Neotree
+#+BEGIN_SRC emacs-lisp
+  (use-package neotree
+    :ensure t
+    :hook
+    (neotree-mode . (lambda () (setq mode-line-format nil))))
+
+#+END_SRC
+
+#+RESULTS:
+| lambda | nil | (setq mode-line-format nil) |
+
+** Git
+*** Fringe
+#+BEGIN_SRC emacs-lisp
+  (use-package git-gutter
+    :ensure t
+    :hook (prog-mode . git-gutter-mode)
+    :config
+    (setq git-gutter:update-interval 0.02))
+
+  (use-package git-gutter-fringe
+    :after git-gutter
+    :ensure t
+    :config
+    (define-fringe-bitmap 'git-gutter-fr:added [224] nil nil '(center repeated))
+    (define-fringe-bitmap 'git-gutter-fr:modified [224] nil nil '(center repeated))
+    (define-fringe-bitmap 'git-gutter-fr:deleted [128 192 224 240] nil nil 'bottom))
+#+END_SRC
+
+*** Magit
+#+BEGIN_SRC emacs-lisp
+  (use-package magit :ensure t)
+#+END_SRC
+
+* Utils
+** Zen-mode
+#+BEGIN_SRC emacs-lisp
+  (use-package olivetti :ensure t)
+#+END_SRC
+
+** Dashboard
+#+BEGIN_SRC emacs-lisp
+  (use-package dashboard
+    :ensure t
+    :config
+    (dashboard-setup-startup-hook)
+    (setq
+      dashboard-startup-banner "~/.config/emacs/rook.png"
+      initial-buffer-choice (lambda () (get-buffer-create dashboard-buffer-name))
+      dashboard-center-content t
+      dashboard-vertically-center-content t))
+#+END_SRC
+
+** Ivy
+#+BEGIN_SRC emacs-lisp
+  (use-package ivy
+    :ensure t
+    :config
+    (ivy-mode)
+    (setq ivy-use-virtual-buffers t)
+    (setq enable-recursive-minibuffers t)
+    )
+  (use-package counsel
+    :ensure t
+    :config
+    (counsel-mode))
+
+  (use-package all-the-icons
+    :ensure t)
+
+  (use-package ivy-rich
+    :ensure t
+    :after ivy
+    :init
+    (ivy-rich-mode 1))
+
+#+END_SRC
+
+** Reverse-im
+#+BEGIN_SRC emacs-lisp
+  (use-package reverse-im
+    :ensure t
+    :config
+    (reverse-im-activate "russian-computer"))
+#+END_SRC
+
+** Window paddings
+#+BEGIN_SRC emacs-lisp
+  (use-package spacious-padding
+    :ensure t
+    :config
+    (spacious-padding-mode))
+#+END_SRC
+
+** Mode-line
+*** Doom Modeline
+#+BEGIN_SRC emacs-lisp
+  (use-package doom-modeline
+    :ensure t
+    :init
+    (doom-modeline-mode 1)
+    :config
+    (setq doom-modeline-buffer-encoding nil))
+#+END_SRC
+
+*** Time
+#+BEGIN_SRC emacs-lisp
+  (setq
+    display-time-24hr-format t
+    display-time-default-load-average nil)
+
+  (display-time-mode 1)
+#+END_SRC
+
+*** Pomodoro
+#+BEGIN_SRC emacs-lisp
+  (setq alert-default-style 'libnotify)
+
+  (use-package pomm
+    :ensure t
+    :config
+    (pomm-mode-line-mode))
+#+END_SRC
+
+** Theme
+#+BEGIN_SRC emacs-lisp
+  (use-package doom-themes
+    :ensure t
+    :config
+    (setq doom-themes-enable-bold t
+          doom-themes-enable-italic t)
+    (load-theme 'doom-one t)
+    (doom-themes-visual-bell-config)
+    (doom-themes-neotree-config)
+    (doom-themes-org-config))
+#+END_SRC
+
+* Hooks
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'org-mode-hook (lambda ()
+    (olivetti-set-width 120)
+    (olivetti-mode)
+    (display-line-numbers-mode 0)
+    (visual-line-mode)))
+
+  (add-hook 'org-agenda-mode-hook (lambda ()
+    (olivetti-set-width 72)
+    (olivetti-mode)
+    (org-super-agenda-mode)))
+#+END_SRC
+
+* Keybindings
+#+BEGIN_SRC emacs-lisp
+  (evil-set-leader 'normal (kbd "SPC"))
+
+  (define-key evil-motion-state-map (kbd "RET") nil)
+  (define-key evil-motion-state-map (kbd "K") nil)
+  (keymap-global-set "C-SPC" 'company-capf)
+  (keymap-global-set "M-TAB" 'other-window)
+
+  (evil-global-set-key 'normal (kbd "<leader>e") 'neotree-toggle)
+  (evil-global-set-key 'normal (kbd "K") 'lsp-ui-doc-glance)
+  (evil-global-set-key 'normal (kbd "<leader>DEL") (lambda ()
+    (interactive)
+    (save-buffer)
+    (kill-current-buffer)))
+
+  (define-key company-active-map
+              (kbd "<tab>")
+              (lambda ()
+                (interactive)
+                (company-complete-common-or-cycle)))
+  (define-key company-active-map
+              (kbd "<backtab>")
+              (lambda ()
+                (interactive)
+                (company-complete-common-or-cycle -1)))
+#+END_SRC
+
+#+RESULTS:
+| lambda | nil | (interactive) | (company-complete-common-or-cycle -1) |

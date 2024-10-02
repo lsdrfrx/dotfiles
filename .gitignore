@@ -1,0 +1,3 @@
+emacs/*
+!emacs/config.org
+!emacs/rook.png
