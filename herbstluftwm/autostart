@@ -16,7 +16,7 @@ pkill udiskie
 dunst &
 picom &
 pipewire &
-feh --bg-fill ~/.config/wallpapers/od_sea.jpg
+feh --bg-fill ~/.config/wallpapers/solid.jpg
 emacs --daemon &
 udiskie --notify --automount &
 polybar &
@@ -145,26 +145,27 @@ hc set frame_border_width 0
 hc set show_frame_decorations 'focused_if_multiple'
 hc set frame_bg_transparent on
 hc set frame_transparent_width 0
-hc set frame_gap 4
+hc set frame_gap 0
 
 hc attr theme.title_when never
-hc attr theme.border_width 3
+hc attr theme.border_width 4
+hc attr theme.active.inner_color '#999999'
+hc attr theme.urgent.inner_color '#000000'
+hc attr theme.normal.inner_color '#000000'
+
 hc attr theme.floating.border_width 3
-hc attr theme.floating.outer_width 1
-hc attr theme.floating.outer_color '#61AFEF'
-hc attr theme.active.inner_color '#61AFEF'
-hc attr theme.urgent.inner_color '#C678DD'
-hc attr theme.normal.inner_color '#606060'
+hc attr theme.floating.outer_width 3
+hc attr theme.floating.outer_color '#000000'
 
 # copy inner color to outer_color
 for state in active urgent normal ; do
     hc substitute C theme.${state}.inner_color \
         attr theme.${state}.outer_color C
 done
-hc attr theme.tiling.outer_width 1
-hc attr theme.background_color '#141414'
 
-hc set window_gap 16
+hc attr theme.tiling.outer_width 4
+
+hc set window_gap 4
 hc set frame_padding 0
 hc set smart_window_surroundings off
 hc set smart_frame_surroundings on

@@ -57,7 +57,7 @@ vim.cmd("syntax on")
 vim.cmd("set textwidth=500")
 vim.cmd("set fo+=t")
 
-vim.cmd("colorscheme monochrome")
+vim.cmd("colorscheme yui")
 
 vim.cmd("highlight Folded guibg=NONE")
 vim.cmd("highlight FoldColumn ctermfg=NONE guifg=NONE")
