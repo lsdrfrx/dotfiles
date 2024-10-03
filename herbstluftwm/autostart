@@ -16,7 +16,7 @@ pkill udiskie
 dunst &
 picom &
 pipewire &
-feh --bg-fill ~/.config/wallpapers/od_sea.jpg
+feh --bg-fill ~/.config/wallpapers/gruv-temple.png
 emacs --daemon &
 udiskie --notify --automount &
 polybar &
@@ -151,10 +151,10 @@ hc attr theme.title_when never
 hc attr theme.border_width 3
 hc attr theme.floating.border_width 3
 hc attr theme.floating.outer_width 1
-hc attr theme.floating.outer_color '#61AFEF'
-hc attr theme.active.inner_color '#61AFEF'
-hc attr theme.urgent.inner_color '#C678DD'
-hc attr theme.normal.inner_color '#606060'
+hc attr theme.floating.outer_color '#fabd28'
+hc attr theme.active.inner_color '#fabd28'
+hc attr theme.urgent.inner_color '#fb4934'
+hc attr theme.normal.inner_color '#f38019'
 
 # copy inner color to outer_color
 for state in active urgent normal ; do
