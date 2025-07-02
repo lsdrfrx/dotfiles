@@ -1,0 +1,76 @@
+# Herbstluftwm hotkeys
+super + {h,j,k,l}
+  herbstclient focus {left,down,up,right}
+
+super + {Left,Down,Up,Right}
+  herbstclient focus {left,down,up,right}
+
+super + shift + {h,j,k,l}
+  herbstclient shift {left,down,up,right}
+
+super + shift + {Left,Down,Up,Right}
+  herbstclient shift {left,down,up,right}
+
+super + control + r
+  herbstclient reload
+
+super + control + q
+  herbstclient quit
+
+super + control + space
+  herbstclient split explode
+
+super + shift + f
+  herbstclient set_attr clients.focus.floating toggle
+
+super + f
+  herbstclient fullscreen toggle
+
+super + shift + d
+  herbstclient set_attr clients.focus.decorated toggle
+
+super + p
+  herbstclient pseudotile toggle
+
+super + control + {h,j,k,l}
+  herbstclient resize {left,down,up,right} +0.02
+
+super + control + {Left,Down,Up,Right}
+  herbstclient resize {left,down,up,right} +0.02
+
+super + {_,shift} + Tab
+  herbstclient cycle_all {+1,-1}
+
+# Run terminal
+super + Return
+  kitty
+
+# Show rofi
+super + d
+  ~/.config/rofi/launchers/type-1/launcher.sh
+
+# File manager
+super + e
+  nautilus
+
+# Screenshot
+super + shift + s
+  flameshot gui
+
+# Toggle polybar
+super + Escape
+  polybar-msg cmd toggle
+
+# Media keys
+XF86Audio{Raise,Lower}Volume
+  pamixer {-i,-d} 5
+
+XF86AudioMute
+  pamixer -t
+
+XF86Audio{Next,Prev,Play}
+  mpc {next,prev,toggle}
+
+# Run applications
+super + shift + e
+  emacsclient -c

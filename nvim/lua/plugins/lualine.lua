@@ -1,26 +1,52 @@
 return {
 	"nvim-lualine/lualine.nvim", -- Bottom statusline
 	config = function()
-		local monochrome = require("lualine.themes.monochrome")
-		monochrome.normal.b.bg = "NONE"
-		monochrome.normal.c.bg = "NONE"
-		monochrome.insert.b.bg = "NONE"
-		monochrome.visual.b.bg = "NONE"
-		monochrome.command.b.bg = "NONE"
-		monochrome.replace.b.bg = "NONE"
-		monochrome.inactive.c.bg = "NONE"
-
 		require("lualine").setup({
 			options = {
-				theme = monochrome,
-				section_separators = { left = "  ", right = " " },
+				disabled_filetypes = { "neo-tree" },
+				section_separators = { left = "", right = "" },
 			},
 			sections = {
-				lualine_a = { "mode" },
-				lualine_b = { "branch", "diff", "diagnostics", "filename" },
+				lualine_a = {
+					{
+						"mode",
+						fmt = function(str)
+							local case = {
+								["NORMAL"] = " ",
+								["INSERT"] = " ",
+								["VISUAL"] = " ",
+								["COMMAND"] = " ",
+							}
+
+							if case[str] == nil then
+								return case["NORMAL"]
+							end
+							return case[str]
+						end,
+					},
+				},
+				lualine_b = {
+					{
+						"bo:modified",
+						fmt = function(isModified)
+							if isModified == "true" then
+								return " "
+							end
+							return ""
+						end,
+					},
+				},
 				lualine_c = {},
 				lualine_x = {},
-				lualine_y = { "filetype" },
+				lualine_y = { "diagnostics", "filetype" },
+				lualine_z = {},
+			},
+			inactive_sections = {
+				lualine_a = {},
+				lualine_b = {},
+				lualine_c = {},
+				lualine_x = {},
+				lualine_y = {},
 				lualine_z = {},
 			},
 		})

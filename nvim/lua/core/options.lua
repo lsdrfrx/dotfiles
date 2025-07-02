@@ -4,7 +4,6 @@ local opt = vim.opt
 opt.compatible = false
 opt.clipboard = "unnamedplus"
 opt.number = true
-opt.relativenumber = true
 opt.cursorline = true
 opt.wrap = false
 opt.history = 1000
@@ -57,20 +56,25 @@ vim.cmd("syntax on")
 vim.cmd("set textwidth=500")
 vim.cmd("set fo+=t")
 
-vim.cmd("colorscheme monochrome")
+vim.cmd("colorscheme gruvbox")
 
 vim.cmd("highlight Folded guibg=NONE")
 vim.cmd("highlight FoldColumn ctermfg=NONE guifg=NONE")
 
-vim.cmd("highlight Normal guibg=NONE ctermbg=NONE")
-vim.cmd("highlight NormalNC guibg=NONE ctermbg=NONE")
-vim.cmd("highlight NvimTreeNormal guibg=NONE ctermbg=NONE")
-vim.cmd("highlight NvimTreeNormalNC guibg=NONE ctermbg=NONE")
 vim.cmd("highlight DiagnosticVirtualTextWarn guibg=NONE ctermbg=NONE")
 vim.cmd("highlight DiagnosticVirtualTextError guibg=NONE ctermbg=NONE")
 vim.cmd("highlight DiagnosticVirtualTextInfo guibg=NONE ctermbg=NONE")
 vim.cmd("highlight DiagnosticVirtualTextHint guibg=NONE ctermbg=NONE")
 vim.cmd("highlight DiagnosticVirtualTextOk guibg=NONE ctermbg=NONE")
+
+vim.cmd("hi WinSeparator guifg=bg")
+vim.cmd("hi EndOfBuffer guifg=bg")
+vim.cmd("hi WinBar guibg=bg")
+vim.cmd("hi WinBarNC guibg=bg")
+vim.cmd("hi TerminalNormal guibg=bg")
+vim.cmd("hi TerminalBorder guibg=bg")
+vim.cmd("hi NeoTreeIndentMarker guifg=bg")
+vim.cmd("hi SignColumn guibg=bg")
 
 vim.diagnostic.config({
 	signs = false,
@@ -87,3 +91,5 @@ vim.diagnostic.config({
 	update_in_insert = true,
 	severity_sort = true,
 })
+
+vim.g.crystal_auto_format = 1

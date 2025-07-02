@@ -1,0 +1,69 @@
+super + {h,j,k,l}
+  i3-msg focus {left,down,up,right}
+
+super + {Left,Down,Up,Right}
+  i3-msg focus {left,down,up,right}
+
+super + shift + {h,j,k,l}
+  i3-msg move {left,down,up,right}
+
+super + shift + {Left,Down,Up,Right}
+  i3-msg move {left,down,up,right}
+
+super + control + r
+  i3-msg restart
+
+super + control + q
+  i3-msg exit
+
+super + shift + q
+  i3-msg kill
+
+super + control + space
+  i3-msg split t
+
+super + shift + f
+  i3-msg floating toggle
+
+super + f
+  i3-msg fullscreen toggle
+
+super + control + {h,j,k,l}
+  herbstclient resize {left,down,up,right} +0.02
+
+super + control + {Left,Down,Up,Right}
+  herbstclient resize {left,down,up,right} +0.02
+
+super + {_,shift} + Tab
+  herbstclient cycle_all {+1,-1}
+
+# Run terminal
+super + Return
+  ghostty
+
+# Show rofi
+super + d
+#  ~/.config/rofi/launchers/type-1/launcher.sh
+  rofi -show drun
+
+# File manager
+super + e
+  nautilus
+
+# Screenshot
+super + shift + s
+  flameshot gui
+
+# Toggle polybar
+super + Escape
+  polybar-msg cmd toggle
+
+# Media keys
+XF86Audio{Raise,Lower}Volume
+  pamixer {-i,-d} 5
+
+XF86AudioMute
+  pamixer -t
+
+XF86Audio{Next,Prev,Play}
+  mpc {next,prev,toggle}

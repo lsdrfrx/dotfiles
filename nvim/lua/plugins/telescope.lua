@@ -7,14 +7,13 @@ return {
 				extensions = {
 					file_browser = {
 						initial_mode = "normal",
-						theme = "ivy",
+						hijack_netrw = true,
 						hidden = true,
 					},
 				},
 				pickers = {
 					buffers = {
 						initial_mode = "normal",
-						theme = "ivy",
 						show_all_buffers = true,
 						sort_mru = true,
 						mappings = {
@@ -22,12 +21,6 @@ return {
 								["<c-d>"] = "delete_buffer",
 							},
 						},
-					},
-					find_files = {
-						theme = "ivy",
-					},
-					live_grep = {
-						theme = "ivy",
 					},
 				},
 			})

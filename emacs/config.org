@@ -9,6 +9,7 @@ This is my brand new emacs configuration
   (setq-default warning-minimum-level :error)
   (setq-default indent-tabs-mode nil)
   (setq-default tab-width 2)
+  (setq tab-always-indent nil)
   (setq scroll-step 1)
   (setq scroll-conservatively 10000)
 #+END_SRC
@@ -19,11 +20,15 @@ This is my brand new emacs configuration
   (menu-bar-mode -1)
   (tool-bar-mode -1)
   (scroll-bar-mode -1)
+  (global-hl-line-mode t)
 
   (display-line-numbers-mode 1)
 
   (add-to-list 'default-frame-alist '(font . "Fira Code Nerd Font Mono-14"))
 #+END_SRC
+
+#+RESULTS:
+: ((font . Fira Code Nerd Font Mono-14) (internal-border-width . 15) (right-divider-width . 30) (left-fringe . 8) (right-fringe . 8) (scroll-bar-width . 8) (vertical-scroll-bars))
 
 * Evil mode
 #+BEGIN_SRC emacs-lisp
@@ -59,7 +64,7 @@ This is my brand new emacs configuration
     org-hide-emphasis-markers t
     org-return-follows-link t
     org-startup-with-latex-preview t)
-
+  (setq org-src-tab-acts-natively t)
   (setq org-todo-keywords '((sequence "TODO" "SOMEDAY" "IN PROGRESS" "MEETING" "|" "DONE" "DELEGATED" "CANCELED")))
 #+END_SRC
 
@@ -158,6 +163,7 @@ This is my brand new emacs configuration
   (setq
     org-agenda-files (list "~/Documents/org/agenda.org")
     org-agenda-span 1
+    org-agenda-window-setup "only-window"
     org-agenda-skip-timestamp-if-done t
     org-agenda-skip-deadline-if-done t
     org-agenda-skip-scheduled-if-done t
@@ -168,6 +174,9 @@ This is my brand new emacs configuration
       (tags . " %i %-12:c ")
       (search . " %i %-12:c ")))
 #+END_SRC
+
+#+RESULTS:
+: ((agenda .  %?-2i %t ) (todo .  %i %-12:c ) (tags .  %i %-12:c ) (search .  %i %-12:c ))
 
 ** Org Babel
 #+BEGIN_SRC emacs-lisp
@@ -230,11 +239,22 @@ This is my brand new emacs configuration
   (use-package lsp-pyright
     :ensure t
     :hook (python-mode . (lambda ()
+                            (setq-local tab-width 4)
                             (require 'lsp-pyright)
                             (lsp))))
+  (setq python-indent-offset 4)
 
   (use-package nim-mode :ensure t)
+  (use-package nginx-mode :ensure t)
+  (use-package dockerfile-mode :ensure t)
+  (use-package docker-compose-mode :ensure t)
+  (use-package emmet-mode :ensure t)
+  (use-package json-mode :ensure t)
+  (use-package yaml-mode :ensure t)
+
 #+END_SRC
+
+#+RESULTS:
 
 ** Neotree
 #+BEGIN_SRC emacs-lisp
@@ -374,6 +394,17 @@ This is my brand new emacs configuration
     (doom-themes-org-config))
 #+END_SRC
 
+** Telega
+#+BEGIN_SRC emacs-lisp
+  (use-package telega
+    :ensure t
+    :init
+    (setq telega-use-images t)
+    :config
+    (setq telega-use-docker t)
+    (telega-notifications-mode 1))
+#+END_SRC
+
 * Hooks
 #+BEGIN_SRC emacs-lisp
   (add-hook 'org-mode-hook (lambda ()
@@ -397,6 +428,10 @@ This is my brand new emacs configuration
   (keymap-global-set "C-SPC" 'company-capf)
   (keymap-global-set "M-TAB" 'other-window)
 
+  (define-key global-map (kbd "C-c a") #'org-agenda)
+  (define-key global-map (kbd "C-c t") #'telega)
+  (define-key global-map (kbd "C-c c") #'calendar)
+
   (evil-global-set-key 'normal (kbd "<leader>e") 'neotree-toggle)
   (evil-global-set-key 'normal (kbd "K") 'lsp-ui-doc-glance)
   (evil-global-set-key 'normal (kbd "<leader>DEL") (lambda ()
@@ -415,6 +450,3 @@ This is my brand new emacs configuration
                 (interactive)
                 (company-complete-common-or-cycle -1)))
 #+END_SRC
-
-#+RESULTS:
-| lambda | nil | (interactive) | (company-complete-common-or-cycle -1) |

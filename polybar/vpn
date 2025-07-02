@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# List of all available wireguard configs
+configs=$(ls /etc/wireguard | sed "s/.conf//")
+
+# Get current connected vpn
+connected=$(ip link show | grep vpn | awk '{ print $2; }' | sed "s/://")
+
+connect() {
+  sudo wg-quick up $1
+}
+
+disconnect() {
+  sudo wg-quick down $1
+}
+
+current() {
+  if [ -n "$connected" ]; then
+    echo 󰒘 $connected
+  else
+    echo 󰦞 
+  fi
+}
+
+toggle() {
+  if [ -n "$connected" ]; then
+    disconnect $connected
+  else
+    config=$(echo $configs | xargs -n 1 | rofi -dmenu)
+    connect $config
+  fi
+}
+
+if [ "$1" = "toggle" ]; then toggle; fi
+
+if [ "$1" = "current" ]; then current; fi
+
